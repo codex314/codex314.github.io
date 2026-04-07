@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Haryadi Irawan – CV</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --bg2: #161b22;
+      --bg3: #1c2330;
+      --border: #30363d;
+      --accent: #58a6ff;
+      --accent2: #3fb950;
+      --accent3: #f78166;
+      --text: #e6edf3;
+      --text-muted: #8b949e;
+      --glow: rgba(88, 166, 255, 0.15);
+      --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* ── Canvas background ── */
+    #bg-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── Layout ── */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+      position: relative; z-index: 1;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      text-align: center;
+      padding: 72px 24px 48px;
+      position: relative;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 600px; height: 300px;
+      background: radial-gradient(ellipse at center, rgba(88,166,255,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-name {
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #e6edf3 0%, var(--accent) 60%, #a371f7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 16px;
+    }
+
+    .hero-tagline {
+      font-size: 1.05rem;
+      color: var(--accent);
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .hero-contacts {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .hero-contacts a, .hero-contacts span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+    .hero-contacts a:hover { color: var(--accent); }
+
+    .contact-icon {
+      width: 16px; height: 16px;
+      opacity: 0.7;
+    }
+
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent);
+      color: #0d1117;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 10px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 0 20px rgba(88,166,255,0.3);
+    }
+    .btn-download:hover {
+      background: #79c0ff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 30px rgba(88,166,255,0.45);
+    }
+
+    /* ── Section titles ── */
+    .section-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, var(--border), transparent);
+    }
+
+    /* ── Cards grid ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .card:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 32px rgba(88,166,255,0.1);
+    }
+
+    .card-icon {
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+    }
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .card-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* ── Timeline ── */
+    .timeline {
+      position: relative;
+      padding-left: 32px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px; top: 8px; bottom: 8px;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--accent), var(--border));
+      border-radius: 1px;
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 32px;
+    }
+    .timeline-item:last-child { margin-bottom: 0; }
+
+    .timeline-dot {
+      position: absolute;
+      left: -29px;
+      top: 16px;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid var(--bg);
+      box-shadow: 0 0 10px rgba(88,166,255,0.6);
+      z-index: 1;
+    }
+    .timeline-item:first-child .timeline-dot {
+      background: var(--accent2);
+      box-shadow: 0 0 10px rgba(63,185,80,0.6);
+    }
+
+    .timeline-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .timeline-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 4px 24px rgba(88,166,255,0.08);
+    }
+
+    .timeline-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .timeline-company {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .timeline-badge {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: rgba(88,166,255,0.12);
+      color: var(--accent);
+      border: 1px solid rgba(88,166,255,0.25);
+      white-space: nowrap;
+    }
+    .timeline-badge.current {
+      background: rgba(63,185,80,0.12);
+      color: var(--accent2);
+      border-color: rgba(63,185,80,0.25);
+    }
+    .timeline-role {
+      font-size: 0.88rem;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+    .timeline-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ── Education ── */
+    .edu-grid {
+      display: grid;
+      gap: 12px;
+    }
+    .edu-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      transition: border-color 0.2s;
+    }
+    .edu-card:hover { border-color: var(--border); }
+    .edu-card.featured { border-color: rgba(88,166,255,0.3); }
+    .edu-card.featured:hover { border-color: var(--accent); }
+
+    .edu-left {}
+    .edu-school {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .edu-degree {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .edu-right {
+      text-align: right;
+    }
+    .edu-year {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .edu-gpa {
+      display: inline-block;
+      margin-top: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent2);
+      background: rgba(63,185,80,0.1);
+      border: 1px solid rgba(63,185,80,0.25);
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    /* ── Section spacing ── */
+    section { margin-bottom: 52px; }
+
+    /* ── Animate on scroll ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 32px;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 600px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .timeline { padding-left: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<div class="hero">
+  <div class="container" style="padding-top:0; padding-bottom:0;">
+    <div class="hero-name">Haryadi Irawan</div>
+    <div class="hero-tagline">IT Infrastructure Specialist · PT Lippo Karawaci Tbk</div>
+    <div class="hero-contacts">
+      <span>
+        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Cluster Bedugul, Blok D7/11, Kab. Tangerang
+      </span>
+      <a href="tel:+6281316052488">
+        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.02 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.9v2.02z"/></svg>
+        0813-1605-2488
+      </a>
+      <a href="mailto:haryadiirawan@icloud.com">
+        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        haryadiirawan@icloud.com
+      </a>
+      <a href="https://linkedin.com/in/haryadi-irawan-288573137" target="_blank" rel="noopener">
+        <svg class="contact-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </a>
+    </div>
+    <a href="CV_Haryadi_Latest.pdf" download class="btn-download">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Download CV
+    </a>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ═══════════════ SKILLS ═══════════════ -->
+  <section>
+    <div class="section-title reveal">Top Skills</div>
+    <div class="cards-grid">
+
+      <div class="card reveal reveal-delay-1">
+        <div class="card-icon">🛡️</div>
+        <div class="card-title">Network Security</div>
+        <div class="card-desc">Palo Alto, CheckPoint, Aruba, Juniper firewall configuration. Cisco network devices, VPN Site-to-Site (cloud to on-prem).</div>
+      </div>
+
+      <div class="card reveal reveal-delay-2">
+        <div class="card-icon">📋</div>
+        <div class="card-title">Project Management</div>
+        <div class="card-desc">End-to-end IT project delivery in the banking sector — from development through to production, working collaboratively with vendors.</div>
+      </div>
+
+      <div class="card reveal reveal-delay-3">
+        <div class="card-icon">☁️</div>
+        <div class="card-title">Cloud Platforms</div>
+        <div class="card-desc">Amazon Web Services (AWS) and Google Cloud Platform (GCP). Cloud infrastructure management and hybrid cloud connectivity.</div>
+      </div>
+
+      <div class="card reveal reveal-delay-4">
+        <div class="card-icon">💻</div>
+        <div class="card-title">Programming</div>
+        <div class="card-desc">PHP, C++, Python, JavaScript. SQL Server for CRUD applications and database queries. VMware virtualization.</div>
+      </div>
+
+      <div class="card reveal reveal-delay-5">
+        <div class="card-icon">🔐</div>
+        <div class="card-title">HSM &amp; SwiftNet</div>
+        <div class="card-desc">Hardware Security Modules — Luna &amp; Thales. SwiftNet operations in a financial/banking environment.</div>
+      </div>
+
+      <div class="card reveal reveal-delay-1">
+        <div class="card-icon">🗂️</div>
+        <div class="card-title">Infrastructure &amp; IAM</div>
+        <div class="card-desc">Microsoft Active Directory, VMware virtualization server management, and Microsoft Office Suite (Excel, PowerPoint, Word, Visio).</div>
+      </div>
+
+      <div class="card reveal reveal-delay-2">
+        <div class="card-icon">🏢</div>
+        <div class="card-title">Microsoft 365</div>
+        <div class="card-desc">Deep mastery of the M365 ecosystem — Exchange Online, Teams, SharePoint, Intune MDM/MAM, Azure AD, Conditional Access, and enterprise licensing at scale.</div>
+      </div>
+
+      <div class="card reveal reveal-delay-3">
+        <div class="card-icon">🔥</div>
+        <div class="card-title">FortiGate Firewall</div>
+        <div class="card-desc">Next-gen firewall policy management, SSL/TLS deep inspection, IPS, threat prevention, SD-WAN, and secure remote access via FortiClient VPN.</div>
+      </div>
+
+      <div class="card reveal reveal-delay-4">
+        <div class="card-icon">🌐</div>
+        <div class="card-title">Enterprise Network Design</div>
+        <div class="card-desc">Designing resilient, scalable enterprise office infrastructure with Cisco — spanning switching, routing, VLANs, QoS, and structured cabling architecture.</div>
+      </div>
+
+      <div class="card reveal reveal-delay-5">
+        <div class="card-icon">☁️</div>
+        <div class="card-title">Multi-Cloud: AWS &amp; Azure</div>
+        <div class="card-desc">AWS Cloud Practitioner certified. Microsoft Azure for identity, governance, and cloud workloads. Bridges two major cloud platforms to deliver hybrid infrastructure solutions.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════ EXPERIENCE ═══════════════ -->
+  <section>
+    <div class="section-title reveal">Work Experience</div>
+    <div class="timeline">
+
+      <!-- Current -->
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <div class="timeline-company">PT Lippo Karawaci Tbk, Jakarta</div>
+            <span class="timeline-badge current">Mar 2024 – Present</span>
+          </div>
+          <div class="timeline-role">IT Infrastructure Specialist</div>
+          <div class="timeline-desc">
+            Architecting and owning the enterprise IT backbone for one of Indonesia's largest property conglomerates. Commands the full Microsoft 365 ecosystem — from Exchange Online and Teams to Intune device management and Azure AD — ensuring seamless, secure collaboration across the organization. Designs and deploys enterprise-grade office network infrastructure using Cisco switching and routing, translating business requirements into resilient, scalable physical and logical topologies. Enforces perimeter security through FortiGate Firewall, managing policies, SSL inspection, and threat prevention across corporate sites. Extends on-premise strength into the cloud as an AWS Cloud Practitioner, architecting hybrid workloads, while leveraging Microsoft Azure for identity, governance, and cloud services — bridging two major cloud platforms with confidence.
+          </div>
+        </div>
+      </div>
+
+      <!-- Previous current -->
+      <div class="timeline-item reveal reveal-delay-1">
+        <div class="timeline-dot" style="background:var(--accent); box-shadow: 0 0 10px rgba(88,166,255,0.5);"></div>
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <div class="timeline-company">PT Bank Sahabat Sampoerna, Jakarta</div>
+            <span class="timeline-badge">Mar 2023 – Mar 2024</span>
+          </div>
+          <div class="timeline-role">IT Infrastructure &amp; Security Operations</div>
+          <div class="timeline-desc">
+            Managing Firewall and Network devices day-to-day to support live projects including firewall policy management, routing, and configuring VPN Site-to-Site from cloud to on-prem. Operates CheckPoint, Palo Alto, Juniper, Aruba, and Cisco devices.
+          </div>
+        </div>
+      </div>
+
+      <!-- Network Specialist -->
+      <div class="timeline-item reveal reveal-delay-2">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <div class="timeline-company">PT Bank Sahabat Sampoerna, Jakarta</div>
+            <span class="timeline-badge">May 2021 – Mar 2023</span>
+          </div>
+          <div class="timeline-role">Network Project Specialist</div>
+          <div class="timeline-desc">
+            Transitioned from project management into Network &amp; Security, taking ownership of firewall and network device operations. Responsible for opening firewall rules, route creation, and VPN Site-to-Site configurations using CheckPoint, Palo Alto, Juniper, and Cisco.
+          </div>
+        </div>
+      </div>
+
+      <!-- IT PM -->
+      <div class="timeline-item reveal reveal-delay-3">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <div class="timeline-company">PT Bank Sahabat Sampoerna, Jakarta</div>
+            <span class="timeline-badge">Sep 2019 – May 2021</span>
+          </div>
+          <div class="timeline-role">IT Project Manager Officer</div>
+          <div class="timeline-desc">
+            Managed end-to-end delivery of IT projects from initiation to production. Key projects included Rekening Dana Lender (RDL), Central Incentive System (CIS), Elektronik Rapat Anggota (E-RA), and Virtual Account (VA) for Fintech Partnership.
+          </div>
+        </div>
+      </div>
+
+      <!-- Dev -->
+      <div class="timeline-item reveal reveal-delay-4">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <div class="timeline-company">PT Araya Bumi Indonesia (Djarum Group), Jakarta</div>
+            <span class="timeline-badge">Jul 2019 – Dec 2019</span>
+          </div>
+          <div class="timeline-role">Associate Software Developer</div>
+          <div class="timeline-desc">
+            Developed a WebGIS application for HTI Plantation mapping across multiple areas in Kalimantan. The system visualized current plantation data from field areas in a browser-accessible web interface.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════ EDUCATION ═══════════════ -->
+  <section>
+    <div class="section-title reveal">Education</div>
+    <div class="edu-grid">
+
+      <div class="edu-card featured reveal">
+        <div class="edu-left">
+          <div class="edu-school">Bina Nusantara University</div>
+          <div class="edu-degree">S1 Information Technology — Jakarta / Alam Sutera</div>
+        </div>
+        <div class="edu-right">
+          <div class="edu-year">2015 – 2019</div>
+          <div class="edu-gpa">GPA 3.09</div>
+        </div>
+      </div>
+
+      <div class="edu-card reveal reveal-delay-1">
+        <div class="edu-left">
+          <div class="edu-school">SMAN 12 Kota Tangerang</div>
+          <div class="edu-degree">Senior High School</div>
+        </div>
+        <div class="edu-right">
+          <div class="edu-year">2012 – 2015</div>
+        </div>
+      </div>
+
+      <div class="edu-card reveal reveal-delay-2">
+        <div class="edu-left">
+          <div class="edu-school">SMPN 4 Kota Tangerang</div>
+          <div class="edu-degree">Junior High School</div>
+        </div>
+        <div class="edu-right">
+          <div class="edu-year">2009 – 2012</div>
+        </div>
+      </div>
+
+      <div class="edu-card reveal reveal-delay-3">
+        <div class="edu-left">
+          <div class="edu-school">SDN Kota Bambu 03 Pagi</div>
+          <div class="edu-degree">Elementary School — Jakarta Barat</div>
+        </div>
+        <div class="edu-right">
+          <div class="edu-year">2003 – 2009</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <p>© 2026 Haryadi Irawan &nbsp;·&nbsp; Made with Love with AI ❤️</p>
+</footer>
+
+<script>
+  // ─── Intersection Observer for reveal animations ───
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // ─── IT Infrastructure Canvas Background ───
+  (function () {
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Node types
+    const TYPES = {
+      SERVER:    { color: '#58a6ff', glow: 'rgba(88,166,255,0.6)',   label: 'SERVER',    icon: 'server'    },
+      FIREWALL:  { color: '#f78166', glow: 'rgba(247,129,102,0.6)',  label: 'FIREWALL',  icon: 'firewall'  },
+      CLOUD:     { color: '#a371f7', glow: 'rgba(163,113,247,0.6)',  label: 'CLOUD',     icon: 'cloud'     },
+      ROUTER:    { color: '#58a6ff', glow: 'rgba(88,166,255,0.5)',   label: 'ROUTER',    icon: 'router'    },
+      SWITCH:    { color: '#3fb950', glow: 'rgba(63,185,80,0.5)',    label: 'SWITCH',    icon: 'switch'    },
+      WORKSTATION:{ color: '#3fb950', glow: 'rgba(63,185,80,0.4)',  label: 'PC',        icon: 'pc'        },
+      HSM:       { color: '#ffa657', glow: 'rgba(255,166,87,0.6)',   label: 'HSM',       icon: 'hsm'       },
+      AZURE:     { color: '#58a6ff', glow: 'rgba(88,166,255,0.5)',   label: 'AZURE',     icon: 'cloud'     },
+      AWS:       { color: '#ffa657', glow: 'rgba(255,166,87,0.5)',   label: 'AWS',       icon: 'cloud'     },
+      FORTIGATE: { color: '#f78166', glow: 'rgba(247,129,102,0.7)', label: 'FORTIGATE', icon: 'firewall'  },
+    };
+
+    // Node definitions (positions as % of canvas)
+    const NODE_DEFS = [
+      { type: 'FIREWALL',   px: 0.15, py: 0.18 },
+      { type: 'FORTIGATE',  px: 0.82, py: 0.22 },
+      { type: 'SERVER',     px: 0.50, py: 0.12 },
+      { type: 'SERVER',     px: 0.30, py: 0.35 },
+      { type: 'SERVER',     px: 0.70, py: 0.38 },
+      { type: 'ROUTER',     px: 0.50, py: 0.50 },
+      { type: 'SWITCH',     px: 0.22, py: 0.58 },
+      { type: 'SWITCH',     px: 0.78, py: 0.60 },
+      { type: 'CLOUD',      px: 0.12, py: 0.75 },
+      { type: 'AZURE',      px: 0.50, py: 0.80 },
+      { type: 'AWS',        px: 0.88, py: 0.78 },
+      { type: 'WORKSTATION',px: 0.35, py: 0.70 },
+      { type: 'WORKSTATION',px: 0.62, py: 0.68 },
+      { type: 'HSM',        px: 0.08, py: 0.45 },
+      { type: 'HSM',        px: 0.92, py: 0.48 },
+    ];
+
+    // Connections (index pairs)
+    const CONN_DEFS = [
+      [2, 0],[2, 1],[2, 3],[2, 4],
+      [0, 3],[1, 4],[3, 5],[4, 5],
+      [5, 6],[5, 7],[6, 11],[7, 12],
+      [6, 8],[7, 10],[5, 9],
+      [0, 13],[1, 14],[8, 9],[9, 10],
+      [3, 13],[4, 14],
+    ];
+
+    let nodes = [], connections = [], packets = [], scanLines = [], pulseRings = [];
+    let W, H, animId;
+
+    function resize() {
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+      buildScene();
+    }
+
+    function buildScene() {
+      nodes = NODE_DEFS.map((def, i) => ({
+        id: i,
+        type: def.type,
+        x: def.px * W,
+        y: def.py * H,
+        r: 18,
+        pulse: Math.random() * Math.PI * 2,
+        pulseSpeed: 0.02 + Math.random() * 0.01,
+        alertTimer: 0,
+        ...TYPES[def.type]
+      }));
+
+      connections = CONN_DEFS.map(([a, b]) => ({
+        from: nodes[a], to: nodes[b],
+        alpha: 0.12 + Math.random() * 0.1
+      }));
+
+      packets = [];
+      scanLines = [];
+      pulseRings = [];
+
+      // Seed initial packets
+      for (let i = 0; i < 18; i++) spawnPacket();
+    }
+
+    function spawnPacket() {
+      const conn = connections[Math.floor(Math.random() * connections.length)];
+      const dir  = Math.random() < 0.5 ? 1 : -1;
+      const speed = 0.003 + Math.random() * 0.004;
+      const types = ['data','data','data','alert','secure'];
+      const kind  = types[Math.floor(Math.random() * types.length)];
+      packets.push({ conn, t: dir === 1 ? 0 : 1, dir, speed, kind,
+        color: kind === 'alert'  ? '#f78166' :
+               kind === 'secure' ? '#3fb950' : '#58a6ff' });
+    }
+
+    function spawnPulseRing(node, color) {
+      pulseRings.push({ x: node.x, y: node.y, r: node.r, maxR: node.r + 40,
+        color, alpha: 0.7, speed: 0.8 });
+    }
+
+    // ── Draw node icons ──
+    function drawIcon(type, x, y, size, color) {
+      ctx.strokeStyle = color;
+      ctx.fillStyle   = color;
+      ctx.lineWidth   = 1.5;
+      const s = size * 0.55;
+      ctx.save(); ctx.translate(x, y);
+
+      if (type === 'server') {
+        // Stack of rectangles
+        for (let i = -1; i <= 1; i++) {
+          ctx.strokeRect(-s, i * s * 0.7 - s * 0.3, s * 2, s * 0.55);
+          ctx.beginPath(); ctx.arc(s * 0.6, i * s * 0.7, s * 0.12, 0, Math.PI*2); ctx.fill();
+        }
+      } else if (type === 'firewall' || type === 'fortigate') {
+        // Shield
+        ctx.beginPath();
+        ctx.moveTo(0, -s); ctx.lineTo(s, -s * 0.4);
+        ctx.lineTo(s, s * 0.3); ctx.lineTo(0, s);
+        ctx.lineTo(-s, s * 0.3); ctx.lineTo(-s, -s * 0.4);
+        ctx.closePath(); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0, -s * 0.4); ctx.lineTo(0, s * 0.4); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(-s * 0.5, 0); ctx.lineTo(s * 0.5, 0); ctx.stroke();
+      } else if (type === 'cloud') {
+        // Cloud shape
+        ctx.beginPath();
+        ctx.arc(-s * 0.3, s * 0.1, s * 0.45, Math.PI, 0);
+        ctx.arc(s * 0.3, s * 0.1, s * 0.45, Math.PI, 0);
+        ctx.arc(0, -s * 0.2, s * 0.45, Math.PI, 0);
+        ctx.lineTo(s * 0.75, s * 0.55); ctx.lineTo(-s * 0.75, s * 0.55);
+        ctx.closePath(); ctx.stroke();
+      } else if (type === 'router') {
+        // Circle with 4 spokes
+        ctx.beginPath(); ctx.arc(0, 0, s * 0.5, 0, Math.PI * 2); ctx.stroke();
+        for (let a = 0; a < 4; a++) {
+          const angle = (a / 4) * Math.PI * 2;
+          ctx.beginPath();
+          ctx.moveTo(Math.cos(angle) * s * 0.5, Math.sin(angle) * s * 0.5);
+          ctx.lineTo(Math.cos(angle) * s, Math.sin(angle) * s);
+          ctx.stroke();
+          ctx.beginPath(); ctx.arc(Math.cos(angle)*s, Math.sin(angle)*s, s*0.18, 0, Math.PI*2); ctx.fill();
+        }
+      } else if (type === 'switch') {
+        // Rectangle with ports
+        ctx.strokeRect(-s, -s * 0.4, s * 2, s * 0.8);
+        for (let p = -3; p <= 3; p++) {
+          ctx.strokeRect(p * s * 0.27 - s * 0.1, -s * 0.2, s * 0.18, s * 0.4);
+        }
+      } else if (type === 'pc') {
+        // Monitor
+        ctx.strokeRect(-s * 0.7, -s * 0.6, s * 1.4, s);
+        ctx.beginPath(); ctx.moveTo(-s * 0.3, s * 0.4); ctx.lineTo(s * 0.3, s * 0.4); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0, s * 0.4); ctx.lineTo(0, s * 0.7); ctx.stroke();
+      } else if (type === 'hsm') {
+        // Lock shape
+        ctx.beginPath(); ctx.arc(0, -s * 0.3, s * 0.45, Math.PI, 0); ctx.stroke();
+        ctx.strokeRect(-s * 0.5, -s * 0.1, s, s * 0.9);
+        ctx.beginPath(); ctx.arc(0, s * 0.35, s * 0.18, 0, Math.PI * 2); ctx.fill();
+      }
+
+      ctx.restore();
+    }
+
+    // ── Main draw ──
+    function draw(ts) {
+      ctx.clearRect(0, 0, W, H);
+
+      // ── Grid ──
+      ctx.strokeStyle = 'rgba(48,54,61,0.35)';
+      ctx.lineWidth = 0.5;
+      const gs = 60;
+      for (let x = 0; x < W; x += gs) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+      }
+      for (let y = 0; y < H; y += gs) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+      }
+
+      // ── Connections ──
+      connections.forEach(c => {
+        const dx = c.to.x - c.from.x, dy = c.to.y - c.from.y;
+        const grad = ctx.createLinearGradient(c.from.x, c.from.y, c.to.x, c.to.y);
+        grad.addColorStop(0, `rgba(88,166,255,${c.alpha})`);
+        grad.addColorStop(1, `rgba(88,166,255,${c.alpha * 0.4})`);
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = 0.8;
+        ctx.setLineDash([4, 8]);
+        ctx.beginPath(); ctx.moveTo(c.from.x, c.from.y); ctx.lineTo(c.to.x, c.to.y); ctx.stroke();
+        ctx.setLineDash([]);
+      });
+
+      // ── Pulse rings ──
+      pulseRings = pulseRings.filter(p => p.alpha > 0);
+      pulseRings.forEach(p => {
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.strokeStyle = p.color.replace(')', `,${p.alpha})`).replace('rgb', 'rgba');
+        ctx.lineWidth = 1.5; ctx.stroke();
+        p.r += p.speed; p.alpha -= 0.012;
+      });
+
+      // ── Data packets ──
+      packets.forEach((pkt, idx) => {
+        pkt.t += pkt.dir * pkt.speed;
+        if (pkt.t > 1 || pkt.t < 0) {
+          // Bounce node
+          const hitNode = pkt.t > 1 ? pkt.conn.to : pkt.conn.from;
+          if (pkt.kind === 'alert') {
+            hitNode.alertTimer = 60;
+            spawnPulseRing(hitNode, 'rgb(247,129,102)');
+          } else if (pkt.kind === 'secure') {
+            spawnPulseRing(hitNode, 'rgb(63,185,80)');
+          }
+          pkt.t = pkt.dir === 1 ? 0 : 1;
+          pkt.dir *= -1;
+          pkt.kind = ['data','data','data','alert','secure'][Math.floor(Math.random()*5)];
+          pkt.color = pkt.kind === 'alert' ? '#f78166' : pkt.kind === 'secure' ? '#3fb950' : '#58a6ff';
+          pkt.speed = 0.003 + Math.random() * 0.004;
+        }
+        const x = pkt.conn.from.x + (pkt.conn.to.x - pkt.conn.from.x) * pkt.t;
+        const y = pkt.conn.from.y + (pkt.conn.to.y - pkt.conn.from.y) * pkt.t;
+        // Trail
+        for (let i = 1; i <= 4; i++) {
+          const tt = Math.max(0, Math.min(1, pkt.t - pkt.dir * pkt.speed * i * 3));
+          const tx = pkt.conn.from.x + (pkt.conn.to.x - pkt.conn.from.x) * tt;
+          const ty = pkt.conn.from.y + (pkt.conn.to.y - pkt.conn.from.y) * tt;
+          ctx.beginPath(); ctx.arc(tx, ty, (5 - i) * 0.5, 0, Math.PI * 2);
+          ctx.fillStyle = pkt.color + Math.floor((5 - i) * 25).toString(16).padStart(2,'0');
+          ctx.fill();
+        }
+        ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2);
+        ctx.fillStyle = pkt.color;
+        ctx.shadowColor = pkt.color; ctx.shadowBlur = 8;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      });
+
+      // Spawn new packets occasionally
+      if (Math.random() < 0.008 && packets.length < 30) spawnPacket();
+
+      // ── Nodes ──
+      nodes.forEach(node => {
+        node.pulse += node.pulseSpeed;
+        const isAlert = node.alertTimer > 0;
+        if (isAlert) node.alertTimer--;
+        const activeColor = isAlert ? '#f78166' : node.color;
+        const activeGlow  = isAlert ? 'rgba(247,129,102,0.8)' : node.glow;
+
+        // Outer glow halo
+        const grad = ctx.createRadialGradient(node.x, node.y, node.r * 0.5, node.x, node.y, node.r * 2.2);
+        grad.addColorStop(0, activeGlow.replace('0.6','0.18').replace('0.5','0.18').replace('0.4','0.15').replace('0.7','0.2'));
+        grad.addColorStop(1, 'transparent');
+        ctx.beginPath(); ctx.arc(node.x, node.y, node.r * 2.2, 0, Math.PI * 2);
+        ctx.fillStyle = grad; ctx.fill();
+
+        // Pulsing ring
+        const pr = node.r + 6 + Math.sin(node.pulse) * 4;
+        ctx.beginPath(); ctx.arc(node.x, node.y, pr, 0, Math.PI * 2);
+        ctx.strokeStyle = activeColor + '55';
+        ctx.lineWidth = 1; ctx.stroke();
+
+        // Node body
+        ctx.beginPath(); ctx.arc(node.x, node.y, node.r, 0, Math.PI * 2);
+        ctx.fillStyle = '#161b22';
+        ctx.shadowColor = activeGlow; ctx.shadowBlur = 16;
+        ctx.fill(); ctx.shadowBlur = 0;
+        ctx.strokeStyle = activeColor;
+        ctx.lineWidth = 1.5; ctx.stroke();
+
+        // Icon
+        ctx.shadowColor = activeColor; ctx.shadowBlur = 6;
+        drawIcon(node.icon, node.x, node.y, node.r, activeColor);
+        ctx.shadowBlur = 0;
+
+        // Label
+        ctx.fillStyle = activeColor + 'cc';
+        ctx.font = `bold 8px monospace`;
+        ctx.textAlign = 'center';
+        ctx.fillText(node.label, node.x, node.y + node.r + 13);
+      });
+
+      // ── Scan line sweep ──
+      const scanY = (ts * 0.04) % H;
+      const scanGrad = ctx.createLinearGradient(0, scanY - 60, 0, scanY + 4);
+      scanGrad.addColorStop(0, 'transparent');
+      scanGrad.addColorStop(1, 'rgba(88,166,255,0.04)');
+      ctx.fillStyle = scanGrad;
+      ctx.fillRect(0, scanY - 60, W, 64);
+
+      animId = requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+    animId = requestAnimationFrame(draw);
+  })();
+</script>
+
+</body>
+</html>
